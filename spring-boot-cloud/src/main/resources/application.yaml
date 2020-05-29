@@ -1,0 +1,46 @@
+spring:
+    application:
+        name: spring-cloud-eureka
+
+---
+# This profile is used when running a single instance
+spring:
+  profiles: default
+server:
+  port: 8000
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+    serviceUrl:
+        defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+
+---
+spring:
+  profiles: peer1
+server:
+  port: 8001
+eureka:
+  instance:
+    hostname: peer1
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    serviceUrl:
+        defaultZone: http://peer2:8002/eureka/
+
+---
+spring:
+  profiles: peer2
+server:
+  port: 8002
+eureka:
+  instance:
+    hostname: peer2
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    serviceUrl:
+        defaultZone: http://peer1:8001/eureka/
